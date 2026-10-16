@@ -2,7 +2,7 @@
 
 Chương trình được xây dựng bằng Python để thực hành lập trình hướng đối tượng (OOP). Bài tập mô phỏng việc quản lý thiết bị phục vụ giảng dạy, phòng học và quy trình mượn – trả thiết bị tại trường đại học.
 
-> **Tiến độ hiện tại:** Đã hoàn thành lần code 1 (các lớp thiết bị) và lần code 2 (lớp phòng học). Các chức năng người mượn, phiếu mượn, trả thiết bị và ngoại lệ nghiệp vụ sẽ được bổ sung ở những giai đoạn tiếp theo.
+> **Tiến độ hiện tại:** Đã hoàn thành lần code 1 (các lớp thiết bị), lần code 2 (lớp phòng học) và lần code 3 (người mượn). Lớp `BorrowItem`, phiếu mượn và ngoại lệ nghiệp vụ sẽ được bổ sung ở các giai đoạn tiếp theo.
 
 ## Mục tiêu
 
@@ -28,6 +28,13 @@ Chương trình được xây dựng bằng Python để thực hành lập trì
 - Lọc thiết bị đang ở trạng thái `UNDER_MAINTENANCE` hoặc đã được sử dụng trên 5 năm.
 - Không cho thêm thiết bị rỗng hoặc thiết bị có mã trùng trong cùng phòng.
 
+### 3. Quản lý người mượn
+
+- `IBorrower` định nghĩa các thông tin và hành vi chung của người mượn.
+- `Lecturer` đại diện cho giảng viên, được mượn tối đa 3 thiết bị trên một phiếu.
+- `TeachingAssistant` đại diện cho trợ giảng, được mượn tối đa 2 thiết bị trên một phiếu.
+- Mã người mượn và họ tên không được để trống; khoảng trắng ở đầu và cuối được loại bỏ.
+
 ## Cấu trúc thư mục
 
 ```text
@@ -37,7 +44,8 @@ w06/
 │   └── 01-phan-tich-va-thiet-ke.md
 ├── src/
 │   ├── device.py
-│   └── class_room.py
+│   ├── class_room.py
+│   └── borrower.py
 └── tests/
     ├── test_device.py
     └── test_class_room.py
@@ -68,14 +76,13 @@ Lệnh trên tự động tìm các file kiểm thử có tên bắt đầu bằ
 
 - Đề bài chưa quy định công thức tính chi phí bảo trì. Trong phiên bản hiện tại, cả ba loại thiết bị đang tạm tính chi phí bằng **5% giá mua**. Đây là giả định triển khai, không phải công thức được nêu rõ trong đề; cần điều chỉnh nếu giảng viên cung cấp quy tắc khác.
 - Các lớp và tên phương thức đang dùng quy ước đặt tên Python (`snake_case`).
-- Phần mượn – trả và xử lý ngoại lệ nghiệp vụ chưa được triển khai ở tiến độ hiện tại.
+- Quy tắc giới hạn số thiết bị đã được khai báo trong từng loại người mượn; việc áp dụng giới hạn này khi tạo phiếu sẽ được thực hiện trong phần `BorrowingSlip`. Phần mượn – trả và xử lý ngoại lệ nghiệp vụ chưa được triển khai.
 
 ## Kế hoạch phát triển tiếp theo
 
-1. Xây dựng lớp và giao diện người mượn (`IBorrower`, `Lecturer`, `TeachingAssistant`).
-2. Xây dựng `BorrowItem` để lưu thông tin mượn và trả thiết bị.
-3. Xây dựng `BorrowingSlip` cùng các quy tắc mượn – trả và ngoại lệ nghiệp vụ.
-4. Bổ sung kiểm thử cho các luồng thành công và các trường hợp phát sinh ngoại lệ theo đề bài.
+1. Xây dựng `BorrowItem` để lưu thông tin mượn và trả thiết bị.
+2. Xây dựng `BorrowingSlip` cùng các quy tắc mượn – trả và ngoại lệ nghiệp vụ.
+3. Bổ sung kiểm thử cho các luồng thành công và các trường hợp phát sinh ngoại lệ theo đề bài.
 
 ## Tài liệu
 
