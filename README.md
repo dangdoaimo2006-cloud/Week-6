@@ -5,7 +5,7 @@ Bài tập lập trình hướng đối tượng bằng Python. Dự án đượ
 ## Cấu trúc hiện tại
 
 ```text
-OOP_ThietBi_BaoTri/
+w06/
 ├── README.md
 ├── docs/
 │   └── 01-phan-tich-va-thiet-ke.md
@@ -28,6 +28,15 @@ OOP_ThietBi_BaoTri/
 
 **Lưu ý:** Đề chưa nêu công thức cụ thể để tính chi phí bảo trì hằng năm. Trong lần code này, tạm dùng 5% giá mua cho cả ba loại thiết bị để hoàn thiện cấu trúc phương thức; cần thay theo công thức của giảng viên nếu có quy định riêng.
 
+### Lần code 2: Lớp phòng học
+
+- Xây dựng lớp `ClassRoom` với mã phòng, tên phòng, sức chứa và danh sách thiết bị.
+- Bổ sung các phương thức thêm, xóa và tìm thiết bị theo mã.
+- Không cho phép thêm thiết bị rỗng hoặc thêm hai thiết bị có cùng mã vào một phòng.
+- Tính tổng chi phí bảo trì bằng cách gọi phương thức tương ứng trên từng thiết bị (đa hình).
+- Lọc thiết bị đang ở trạng thái `UNDER_MAINTENANCE` hoặc đã được đưa vào sử dụng trên 5 năm.
+- Bổ sung kiểm thử cho các chức năng của phòng học.
+
 ## Chạy kiểm thử
 
 Mở terminal tại thư mục dự án và chạy:
@@ -40,8 +49,16 @@ python -m unittest discover -s tests -v
 
 ```bash
 git add README.md docs/01-phan-tich-va-thiet-ke.md src tests
-git commit -m "Lan code 1: xay dung lop Device va cac loai thiet bi"
+git commit -m "Xây dựng lớp thiết bị và các loại thiết bị"
 git push
+```
+
+## Commit lần code 2
+
+```bash
+git add README.md src/class_room.py tests/test_class_room.py
+git commit -m "Xây dựng lớp phòng học và kiểm thử quản lý thiết bị"
+git push origin main
 ```
 
 ## Các phần dự kiến triển khai tiếp theo
