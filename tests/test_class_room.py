@@ -12,15 +12,15 @@ from src.device import (
 
 class TestClassRoom(unittest.TestCase):
     def setUp(self):
-        self.room = ClassRoom("P101", "Phòng học 101", 40)
-        self.microphone = Microphone("MIC01", "Micro phòng học", 2023, 1_000_000)
+        self.room = ClassRoom("P101", "Phong hoc 101", 40)
+        self.microphone = Microphone("MIC01", "Micro phong hoc", 2023, 1_000_000)
         self.remote = AirConditionerRemote(
-            "AC01", "Điều khiển điều hòa", 2018, 200_000
+            "AC01", "Đieu khien đieu hoa", 2018, 200_000
         )
 
     def test_create_class_room(self):
         self.assertEqual(self.room.room_id, "P101")
-        self.assertEqual(self.room.name, "Phòng học 101")
+        self.assertEqual(self.room.name, "Phong hoc 101")
         self.assertEqual(self.room.capacity, 40)
         self.assertEqual(len(self.room.devices), 0)
 
@@ -36,7 +36,7 @@ class TestClassRoom(unittest.TestCase):
     def test_cannot_add_duplicate_device_id(self):
         self.room.add_device(self.microphone)
         another_microphone = Microphone(
-            "MIC01", "Micro khác", 2024, 800_000
+            "MIC01", "Micro khac", 2024, 800_000
         )
         with self.assertRaises(ValueError):
             self.room.add_device(another_microphone)
@@ -57,10 +57,10 @@ class TestClassRoom(unittest.TestCase):
     def test_devices_requiring_maintenance(self):
         old_device = self.remote
         device_under_maintenance = ProjectorRemote(
-            "PR01", "Điều khiển máy chiếu", date.today().year, 400_000,
+            "PR01", "Đieu khien may chieu", date.today().year, 400_000,
             DeviceStatus.UNDER_MAINTENANCE,
         )
-        new_device = Microphone("MIC02", "Micro mới", date.today().year, 500_000)
+        new_device = Microphone("MIC02", "Micro moi", date.today().year, 500_000)
 
         self.room.add_device(old_device)
         self.room.add_device(device_under_maintenance)
@@ -73,9 +73,9 @@ class TestClassRoom(unittest.TestCase):
 
     def test_invalid_room_data(self):
         with self.assertRaises(ValueError):
-            ClassRoom("", "Phòng học", 30)
+            ClassRoom("", "Phong hoc", 30)
         with self.assertRaises(ValueError):
-            ClassRoom("P102", "Phòng học", 0)
+            ClassRoom("P102", "Phong hoc", 0)
 
 
 if __name__ == "__main__":

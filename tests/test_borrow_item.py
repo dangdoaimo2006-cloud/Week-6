@@ -7,7 +7,7 @@ from src.device import Microphone
 
 class TestBorrowItem(unittest.TestCase):
     def setUp(self):
-        self.device = Microphone("MIC01", "Micro không dây", 2023, 1_000_000)
+        self.device = Microphone("MIC01", "Micro khong day", 2023, 1_000_000)
         self.borrowed_date = date(2026, 10, 17)
 
     def test_create_borrow_item(self):
@@ -74,7 +74,7 @@ class TestBorrowItem(unittest.TestCase):
         item = BorrowItem(self.device, self.borrowed_date, 1, 2)
 
         self.assertIn("MIC01", str(item))
-        self.assertIn("Chưa trả", str(item))
+        self.assertIn("Chua tra", str(item))
 
 
 if __name__ == "__main__":

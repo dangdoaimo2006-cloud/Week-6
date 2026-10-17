@@ -1,4 +1,4 @@
-"""Kiểm thử tích hợp luồng phòng học - phiếu mượn - thiết bị."""
+"""Kiem thu tich hop luong phong hoc - phieu muon - thiet bi."""
 import unittest
 from datetime import date
 
@@ -11,18 +11,18 @@ from src.exceptions import BorrowLimitExceededException, DeviceUnavailableExcept
 
 class TestBorrowingWorkflow(unittest.TestCase):
     def setUp(self):
-        self.room = ClassRoom("P101", "Phòng học 101", 40)
+        self.room = ClassRoom("P101", "Phong hoc 101", 40)
         self.mic = Microphone(
-            "MIC01", "Micro không dây", 2023, 1_000_000, max_borrow_days=3
+            "MIC01", "Micro khong day", 2023, 1_000_000, max_borrow_days=3
         )
         self.remote = ProjectorRemote(
-            "PRJ01", "Điều khiển máy chiếu", 2022, 500_000, max_borrow_days=2
+            "PRJ01", "Đieu khien may chieu", 2022, 500_000, max_borrow_days=2
         )
         self.room.add_device(self.mic)
         self.room.add_device(self.remote)
 
     def test_complete_borrow_return_workflow(self):
-        borrower = Lecturer("GV01", "Nguyễn Văn An")
+        borrower = Lecturer("GV01", "Nguyen Van An")
         slip = BorrowingSlip("PM01", borrower, self.room.room_id, date(2026, 10, 1), 10_000)
 
         slip.add_device(self.mic, 2)
@@ -35,7 +35,7 @@ class TestBorrowingWorkflow(unittest.TestCase):
         self.assertEqual(slip.calculate_total_late_fee(), 20_000)
 
     def test_failure_does_not_change_device_or_slip(self):
-        borrower = TeachingAssistant("TA01", "Trợ giảng Bình")
+        borrower = TeachingAssistant("TA01", "Tro giang Binh")
         slip = BorrowingSlip("PM02", borrower, self.room.room_id, date(2026, 10, 1))
         self.mic.status = DeviceStatus.UNDER_MAINTENANCE
 
@@ -46,9 +46,9 @@ class TestBorrowingWorkflow(unittest.TestCase):
         self.assertEqual(len(slip.items), 0)
 
     def test_borrower_limit_is_enforced_across_slip_items(self):
-        borrower = TeachingAssistant("TA02", "Trợ giảng Chi")
+        borrower = TeachingAssistant("TA02", "Tro giang Chi")
         slip = BorrowingSlip("PM03", borrower, self.room.room_id, date(2026, 10, 1))
-        third = Microphone("MIC02", "Micro dự phòng", 2024, 800_000)
+        third = Microphone("MIC02", "Micro du phong", 2024, 800_000)
         self.room.add_device(third)
         slip.add_device(self.mic, 1)
         slip.add_device(self.remote, 1)
