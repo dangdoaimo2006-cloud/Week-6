@@ -1,25 +1,26 @@
-# Hệ thống quản lý thiết bị và mượn thiết bị
+# Hệ thống quản lý thiết bị và mượn thiết bị — W06
 
-Chương trình Python mô phỏng việc quản lý thiết bị phục vụ giảng dạy, phòng học, người mượn và quy trình mượn–trả thiết bị. Dự án được triển khai theo từng giai đoạn để bám sát yêu cầu trong `lab w06.pdf`.
+Dự án Python hướng đối tượng cho bài Lab W06. Đây là bản tổng hợp cuối cùng của các phần đã triển khai: thiết bị, phòng học, người mượn, mục mượn, phiếu mượn và ngoại lệ nghiệp vụ.
 
-## Chức năng
+## Chức năng chính
 
-- Quản lý thiết bị: điều khiển điều hòa, micro và điều khiển máy chiếu; trạng thái thiết bị; thời hạn mượn tối đa.
-- Quản lý phòng học: thêm, xóa, tìm thiết bị; tính chi phí bảo trì theo tính đa hình; lọc thiết bị cần bảo trì.
-- Quản lý người mượn: `Lecturer` được mượn tối đa 3 thiết bị trên một phiếu; `TeachingAssistant` được mượn tối đa 2.
-- Quản lý mục mượn `BorrowItem`: ngày mượn, hạn trả, tiết mượn và ngày trả.
-- Quản lý phiếu mượn `BorrowingSlip`: thêm thiết bị, trả thiết bị, tính phí trả muộn và liệt kê mục mượn chưa trả hoặc trả muộn.
-- Ngoại lệ nghiệp vụ: thiết bị không sẵn sàng, vượt giới hạn người mượn, thời hạn mượn không hợp lệ, thiết bị trùng, thiết bị không thuộc phiếu, thiết bị đã trả và ngày trả không hợp lệ.
-- Kiểm thử bằng thư viện chuẩn `unittest`.
+- `Device` là lớp trừu tượng; ba loại thiết bị gồm `AirConditionerRemote`, `Microphone`, `ProjectorRemote`.
+- `DeviceStatus` quản lý ba trạng thái `Available`, `Borrowed`, `UnderMaintenance`.
+- `ClassRoom` quản lý thiết bị, tìm/xóa thiết bị, tính chi phí bảo trì bằng tính đa hình và lọc thiết bị cần bảo trì.
+- `Lecturer` được mượn tối đa 3 thiết bị trên một phiếu; `TeachingAssistant` tối đa 2.
+- `BorrowItem` lưu thông tin mượn, hạn trả và ngày trả.
+- `BorrowingSlip` kiểm tra điều kiện trước khi thay đổi trạng thái thiết bị, xử lý mượn/trả và tính phí trả muộn.
+- Các ngoại lệ nghiệp vụ được khai báo trong `src/exceptions.py`.
+- Bộ kiểm thử đơn vị và tích hợp dùng `unittest`, không cần thư viện ngoài.
 
-## Cấu trúc dự án
+## Cấu trúc
 
 ```text
 w06/
 ├── README.md
-├── docs/
-│   └── 01-phan-tich-va-thiet-ke.md
+├── docs/01-phan-tich-va-thiet-ke.md
 ├── src/
+│   ├── __init__.py
 │   ├── device.py
 │   ├── class_room.py
 │   ├── borrower.py
@@ -27,60 +28,44 @@ w06/
 │   ├── exceptions.py
 │   └── borrowing_slip.py
 └── tests/
+    ├── __init__.py
     ├── test_device.py
     ├── test_class_room.py
     ├── test_borrower.py
     ├── test_borrow_item.py
-    └── test_borrowing_slip.py
+    ├── test_borrowing_slip.py
+    └── test_integration.py
 ```
 
-## Yêu cầu môi trường
+## Yêu cầu và cách chạy
 
-- Python 3.10 trở lên.
-- Không cần cài thư viện bên ngoài.
-
-Kiểm tra phiên bản Python:
-
-```bash
-python --version
-```
-
-## Chạy kiểm thử
-
-Mở terminal tại thư mục gốc `w06` và chạy:
+Yêu cầu Python 3.10 trở lên. Mở terminal tại thư mục `w06` (thư mục chứa `README.md`) và chạy:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-## Ví dụ sử dụng
+Chạy một nhóm kiểm thử riêng, ví dụ:
 
-```python
-from datetime import date
-
-from src.borrower import Lecturer
-from src.borrowing_slip import BorrowingSlip
-from src.device import Microphone
-
-borrower = Lecturer("GV01", "Nguyen Van A")
-device = Microphone(
-    "MIC01", "Micro phong hoc", 2023, 1_000_000,
-    max_borrow_days=1,
-)
-slip = BorrowingSlip("PM01", borrower, "P101", date(2026, 10, 1))
-slip.add_device(device, borrow_days=1)
-fee = slip.return_device("MIC01", date(2026, 10, 3))
-print(fee)
+```bash
+python -m unittest tests.test_integration -v
 ```
 
-## Các giả định triển khai cần biết
+## Các giả định triển khai
 
-- Đề bài yêu cầu thời hạn mượn tối đa của từng thiết bị nhưng không quy định giá trị mặc định. Trong chương trình, `max_borrow_days` mặc định bằng 1 ngày; có thể truyền giá trị khác khi khởi tạo thiết bị.
-- Đề bài chưa nêu công thức hoặc mức phí trả muộn. Chương trình tạm dùng `BorrowingSlip.LATE_FEE_PER_DAY = 10000` (đơn vị tiền tệ theo bài tập) cho mỗi ngày trễ. Có thể thay đổi hằng số hoặc truyền `late_fee_per_day` khi tạo phiếu.
-- Chi phí bảo trì hằng năm hiện được tính bằng 5% giá mua cho cả ba loại thiết bị vì đề chưa chỉ định công thức. Đây là giả định triển khai, không phải quy tắc được nêu trong đề.
-- `BorrowItem` lưu khoảng tiết mượn và hạn trả theo ngày. `BorrowingSlip.add_device()` nhận số ngày mượn; khoảng tiết trong mục được đặt mặc định là tiết 1 đến tiết 1 vì chữ ký phương thức trong đề không truyền thông tin tiết.
-- Các phương thức Python dùng `snake_case`; một số alias viết theo PascalCase được giữ để tiện đối chiếu chữ ký C# trong đề.
+Đề bài không quy định công thức chi phí bảo trì, mức phí trả muộn hoặc thời hạn mượn mặc định. Vì vậy, chương trình dùng các giả định sau; cần điều chỉnh nếu giảng viên cung cấp quy tắc khác:
 
-## Tài liệu
+- Chi phí bảo trì hằng năm = 5% giá mua của thiết bị.
+- Phí trả muộn mặc định = 10.000 cho mỗi ngày trễ; có thể truyền `late_fee_per_day` khi tạo `BorrowingSlip`.
+- `max_borrow_days` mặc định là 1 ngày; có thể cấu hình khi tạo thiết bị.
+- Vì `add_device()` nhận số ngày chứ không nhận khoảng tiết, `BorrowItem` đặt khoảng tiết mặc định từ tiết 1 đến tiết 1.
 
-Xem [`docs/01-phan-tich-va-thiet-ke.md`](docs/01-phan-tich-va-thiet-ke.md) để đọc phân tích yêu cầu và thiết kế sơ bộ.
+Các giả định trên là lựa chọn triển khai, không được xem là công thức bắt buộc từ đề bài.
+
+## Gợi ý commit cuối
+
+```bash
+git add README.md src tests
+git commit -m "Hoàn thiện kiểm thử tích hợp và rà soát dự án W06"
+git push origin main
+```
