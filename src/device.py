@@ -17,6 +17,7 @@ class Device(ABC):
         year_introduced: int,
         purchase_price: float,
         status: DeviceStatus = DeviceStatus.AVAILABLE,
+        max_borrow_days: int = 1,
     ):
         if not device_id or not device_id.strip():
             raise ValueError("Mã thiết bị không được để trống.")
@@ -35,11 +36,17 @@ class Device(ABC):
         if not isinstance(status, DeviceStatus):
             raise TypeError("Trạng thái thiết bị không hợp lệ.")
 
+        if isinstance(max_borrow_days, bool) or not isinstance(max_borrow_days, int):
+            raise TypeError("Thời hạn mượn tối đa phải là số nguyên.")
+        if max_borrow_days <= 0:
+            raise ValueError("Thời hạn mượn tối đa phải lớn hơn 0.")
+
         self._device_id = device_id.strip()
         self.name = name.strip()
         self.year_introduced = year_introduced
         self.purchase_price = float(purchase_price)
         self.status = status
+        self.max_borrow_days = max_borrow_days
 
     @property
     def device_id(self):
@@ -55,7 +62,8 @@ class Device(ABC):
             f"Tên: {self.name}, "
             f"Năm sử dụng: {self.year_introduced}, "
             f"Giá mua: {self.purchase_price:.2f}, "
-            f"Trạng thái: {self.status.value}"
+            f"Trạng thái: {self.status.value}, "
+            f"Thời hạn mượn tối đa: {self.max_borrow_days} ngày"
         )
 
 

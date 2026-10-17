@@ -1,48 +1,18 @@
 # Hệ thống quản lý thiết bị và mượn thiết bị
 
-Chương trình được xây dựng bằng Python để thực hành lập trình hướng đối tượng (OOP). Bài tập mô phỏng việc quản lý thiết bị phục vụ giảng dạy, phòng học và quy trình mượn – trả thiết bị tại trường đại học.
+Chương trình Python mô phỏng việc quản lý thiết bị phục vụ giảng dạy, phòng học, người mượn và quy trình mượn–trả thiết bị. Dự án được triển khai theo từng giai đoạn để bám sát yêu cầu trong `lab w06.pdf`.
 
-> **Tiến độ hiện tại:** Đã hoàn thành lần code 1 (các lớp thiết bị), lần code 2 (lớp phòng học), lần code 3 (người mượn) và lần code 4 (`BorrowItem`). Lớp phiếu mượn và ngoại lệ nghiệp vụ sẽ được bổ sung ở giai đoạn tiếp theo.
+## Chức năng
 
-## Mục tiêu
+- Quản lý thiết bị: điều khiển điều hòa, micro và điều khiển máy chiếu; trạng thái thiết bị; thời hạn mượn tối đa.
+- Quản lý phòng học: thêm, xóa, tìm thiết bị; tính chi phí bảo trì theo tính đa hình; lọc thiết bị cần bảo trì.
+- Quản lý người mượn: `Lecturer` được mượn tối đa 3 thiết bị trên một phiếu; `TeachingAssistant` được mượn tối đa 2.
+- Quản lý mục mượn `BorrowItem`: ngày mượn, hạn trả, tiết mượn và ngày trả.
+- Quản lý phiếu mượn `BorrowingSlip`: thêm thiết bị, trả thiết bị, tính phí trả muộn và liệt kê mục mượn chưa trả hoặc trả muộn.
+- Ngoại lệ nghiệp vụ: thiết bị không sẵn sàng, vượt giới hạn người mượn, thời hạn mượn không hợp lệ, thiết bị trùng, thiết bị không thuộc phiếu, thiết bị đã trả và ngày trả không hợp lệ.
+- Kiểm thử bằng thư viện chuẩn `unittest`.
 
-- Áp dụng lớp trừu tượng, kế thừa, ghi đè phương thức và tính đa hình.
-- Quản lý thông tin thiết bị và danh sách thiết bị trong phòng học.
-- Kiểm tra dữ liệu đầu vào theo các điều kiện của đề bài.
-- Viết kiểm thử đơn vị cho những chức năng đã triển khai.
-
-## Chức năng đã triển khai
-
-### 1. Quản lý thiết bị
-
-- Lớp trừu tượng `Device` lưu mã, tên, năm đưa vào sử dụng, giá mua và trạng thái.
-- Ba lớp thiết bị: `AirConditionerRemote`, `Micro` (`Microphone` trong code) và `ProjectorRemote`.
-- Mã thiết bị được thiết lập khi khởi tạo; kiểm tra mã và tên không rỗng, giá mua lớn hơn 0, năm sử dụng không vượt quá năm hiện tại.
-- Mỗi loại thiết bị triển khai phương thức tính chi phí bảo trì dự kiến hằng năm.
-
-### 2. Quản lý phòng học
-
-- Lớp `ClassRoom` lưu mã phòng, tên phòng, sức chứa và danh sách thiết bị.
-- Thêm thiết bị, xóa thiết bị theo mã và tìm thiết bị theo mã.
-- Tính tổng chi phí bảo trì thông qua phương thức của từng thiết bị (đa hình).
-- Lọc thiết bị đang ở trạng thái `UNDER_MAINTENANCE` hoặc đã được sử dụng trên 5 năm.
-- Không cho thêm thiết bị rỗng hoặc thiết bị có mã trùng trong cùng phòng.
-
-### 3. Quản lý người mượn
-
-- `IBorrower` định nghĩa các thông tin và hành vi chung của người mượn.
-- `Lecturer` đại diện cho giảng viên, được mượn tối đa 3 thiết bị trên một phiếu.
-- `TeachingAssistant` đại diện cho trợ giảng, được mượn tối đa 2 thiết bị trên một phiếu.
-- Mã người mượn và họ tên không được để trống; khoảng trắng ở đầu và cuối được loại bỏ.
-
-### 4. Chi tiết mượn thiết bị (`BorrowItem`)
-
-- Lưu thiết bị, ngày mượn, tiết bắt đầu, tiết kết thúc và ngày trả.
-- Kiểm tra thiết bị không rỗng; các tiết phải là số nguyên dương và tiết kết thúc không đứng trước tiết bắt đầu.
-- Ngày trả ban đầu là `None`; chỉ ghi nhận trả khi ngày trả không trước ngày mượn.
-- Không cho phép ghi nhận trả lần thứ hai cho cùng một mục mượn.
-
-## Cấu trúc thư mục
+## Cấu trúc dự án
 
 ```text
 w06/
@@ -52,16 +22,22 @@ w06/
 ├── src/
 │   ├── device.py
 │   ├── class_room.py
-│   └── borrower.py
+│   ├── borrower.py
+│   ├── borrow_item.py
+│   ├── exceptions.py
+│   └── borrowing_slip.py
 └── tests/
     ├── test_device.py
-    └── test_class_room.py
+    ├── test_class_room.py
+    ├── test_borrower.py
+    ├── test_borrow_item.py
+    └── test_borrowing_slip.py
 ```
 
 ## Yêu cầu môi trường
 
-- Python 3.10 trở lên được khuyến nghị.
-- Không cần cài thêm thư viện bên ngoài; chương trình sử dụng thư viện chuẩn `unittest` để kiểm thử.
+- Python 3.10 trở lên.
+- Không cần cài thư viện bên ngoài.
 
 Kiểm tra phiên bản Python:
 
@@ -69,28 +45,42 @@ Kiểm tra phiên bản Python:
 python --version
 ```
 
-## Cách chạy kiểm thử
+## Chạy kiểm thử
 
-Mở terminal tại thư mục gốc `w06`, sau đó chạy:
+Mở terminal tại thư mục gốc `w06` và chạy:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-Lệnh trên tự động tìm các file kiểm thử có tên bắt đầu bằng `test_` trong thư mục `tests`.
+## Ví dụ sử dụng
 
-## Những điểm cần lưu ý
+```python
+from datetime import date
 
-- Đề bài chưa quy định công thức tính chi phí bảo trì. Trong phiên bản hiện tại, cả ba loại thiết bị đang tạm tính chi phí bằng **5% giá mua**. Đây là giả định triển khai, không phải công thức được nêu rõ trong đề; cần điều chỉnh nếu giảng viên cung cấp quy tắc khác.
-- Các lớp và tên phương thức đang dùng quy ước đặt tên Python (`snake_case`).
-- Quy tắc giới hạn số thiết bị đã được khai báo trong từng loại người mượn; việc áp dụng giới hạn này khi tạo phiếu sẽ được thực hiện trong phần `BorrowingSlip`. Lớp `BorrowItem` đã ghi nhận ngày mượn/trả và các tiết mượn; việc kiểm tra giới hạn mượn theo từng loại thiết bị, đổi trạng thái thiết bị và tính phí trễ sẽ được phối hợp ở `BorrowingSlip`. Hệ thống ngoại lệ nghiệp vụ chưa được triển khai.
+from src.borrower import Lecturer
+from src.borrowing_slip import BorrowingSlip
+from src.device import Microphone
 
-## Kế hoạch phát triển tiếp theo
+borrower = Lecturer("GV01", "Nguyen Van A")
+device = Microphone(
+    "MIC01", "Micro phong hoc", 2023, 1_000_000,
+    max_borrow_days=1,
+)
+slip = BorrowingSlip("PM01", borrower, "P101", date(2026, 10, 1))
+slip.add_device(device, borrow_days=1)
+fee = slip.return_device("MIC01", date(2026, 10, 3))
+print(fee)
+```
 
-1. Xây dựng `BorrowingSlip` cùng các quy tắc mượn – trả và ngoại lệ nghiệp vụ.
-2. Bổ sung tính phí trả muộn và kiểm tra trạng thái thiết bị trong quy trình mượn – trả.
-3. Bổ sung kiểm thử tích hợp cho các luồng thành công và các trường hợp phát sinh ngoại lệ theo đề bài.
+## Các giả định triển khai cần biết
+
+- Đề bài yêu cầu thời hạn mượn tối đa của từng thiết bị nhưng không quy định giá trị mặc định. Trong chương trình, `max_borrow_days` mặc định bằng 1 ngày; có thể truyền giá trị khác khi khởi tạo thiết bị.
+- Đề bài chưa nêu công thức hoặc mức phí trả muộn. Chương trình tạm dùng `BorrowingSlip.LATE_FEE_PER_DAY = 10000` (đơn vị tiền tệ theo bài tập) cho mỗi ngày trễ. Có thể thay đổi hằng số hoặc truyền `late_fee_per_day` khi tạo phiếu.
+- Chi phí bảo trì hằng năm hiện được tính bằng 5% giá mua cho cả ba loại thiết bị vì đề chưa chỉ định công thức. Đây là giả định triển khai, không phải quy tắc được nêu trong đề.
+- `BorrowItem` lưu khoảng tiết mượn và hạn trả theo ngày. `BorrowingSlip.add_device()` nhận số ngày mượn; khoảng tiết trong mục được đặt mặc định là tiết 1 đến tiết 1 vì chữ ký phương thức trong đề không truyền thông tin tiết.
+- Các phương thức Python dùng `snake_case`; một số alias viết theo PascalCase được giữ để tiện đối chiếu chữ ký C# trong đề.
 
 ## Tài liệu
 
-Tài liệu phân tích yêu cầu và thiết kế sơ bộ nằm tại [`docs/01-phan-tich-va-thiet-ke.md`](docs/01-phan-tich-va-thiet-ke.md).
+Xem [`docs/01-phan-tich-va-thiet-ke.md`](docs/01-phan-tich-va-thiet-ke.md) để đọc phân tích yêu cầu và thiết kế sơ bộ.
